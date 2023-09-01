@@ -1,15 +1,15 @@
 package com.vo.configuration;
 
+import java.util.Date;
+
+import com.vo.anno.ZComponent;
+import com.vo.core.ZContext;
 import com.vo.core.ZIDGenerator;
-import com.vo.netty.ZMQClientHandler;
 import com.vo.protobuf.ZMP;
 import com.vo.protobuf.ZMPTypeEnum;
+import com.vo.socket.Connection;
 
 import cn.hutool.core.util.StrUtil;
-
-import java.util.Date;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  *
@@ -19,11 +19,9 @@ import org.springframework.stereotype.Component;
  * @data Aug 10, 2020
  *
  */
-@Component
+@ZComponent
 public final class ZMQClient {
 
-	@Autowired
-	private ZMQClientHandler zmClientHandler;
 
 	public void send(final String topic, final String message) {
 		this.send(topic, message, ZIDGenerator.generateId_UUID(), 0L);
@@ -45,7 +43,8 @@ public final class ZMQClient {
 				.createTime(new Date())
 				.build();
 
-		this.zmClientHandler.writeAndFlush(zmp);
+		final Connection con = ZContext.getBean(Connection.class);
+		con.send(zmp);
 	}
 
 	private static void check(final String topic, final String message, final String messageId,
@@ -63,7 +62,5 @@ public final class ZMQClient {
 			throw new IllegalArgumentException("delayMilliSeconds不能小于0");
 		}
 	}
-
-
 
 }

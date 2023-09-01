@@ -1,27 +1,29 @@
 package com.vo.configuration;
 
+import com.vo.anno.ZConfigurationProperties;
+import com.vo.validator.ZNotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 /**
- * 
+ *
  *
  * @author zhangzhen
  * @data Aug 7, 2020
- * 
+ *
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Configuration
-@ConfigurationProperties(prefix = "zmq")
+@ZConfigurationProperties(prefix = "zmq.server")
 public class ZMQServerConfigurationProperties {
 
-	private String host = "localhost";
+	@ZNotNull
+	private String host;
 
-	private int port = 9591;
+	@ZNotNull
+	private Integer port;
 
 }

@@ -20,11 +20,11 @@
 	</properties>
 
 	<dependencies>
-
-		<!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
+	
 		<dependency>
-			<groupId>io.netty</groupId>
-			<artifactId>netty-all</artifactId>
+			<groupId>com.vo</groupId>
+			<artifactId>sb_zframework</artifactId>
+			<version>1.0-SNAPSHOT</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/io.protostuff/protostuff-runtime -->

@@ -1,17 +1,18 @@
 package com.vo.protobuf;
 
 import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 
+ *
  *
  * @author zhangzhen
  * @data Aug 7, 2020
- * 
+ *
  */
 @Data
 @Builder
@@ -27,7 +28,7 @@ public class ZMP {
 	/**
 	 * ZMPTypeEnum.type
 	 */
-	private int type;
+	private Integer type;
 
 	private String topic;
 
