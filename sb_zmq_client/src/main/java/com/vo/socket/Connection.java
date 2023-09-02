@@ -31,7 +31,6 @@ import com.vo.protobuf.ZMPTypeEnum;
 import com.vo.protobuf.ZPU;
 import com.votool.ze.ZES;
 
-import ch.qos.logback.classic.net.SyslogAppender;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 
@@ -116,26 +115,7 @@ public class Connection {
 
 			ZE.executeInQueue(() -> {
 
-				while (true) {
-
-					final ByteBuffer lengthBuffer = ByteBuffer.allocate(4);
-					try {
-						final int lenght = this.socketChannel.read(lengthBuffer);
-
-						final int lengA = ZPU.byteArrayToInt(lengthBuffer.array());
-
-						final ByteBuffer dataBuffer = ByteBuffer.allocate(lengA);
-
-						final int dataRead = this.socketChannel.read(dataBuffer);
-
-						final ZMP messageR = ZPU.deserialize(dataBuffer.array(), ZMP.class);
-
-						handleMessage(messageR);
-
-					} catch (final IOException e) {
-						e.printStackTrace();
-					}
-				}
+				this.wT();
 			});
 
 //			ZE.executeInQueue(() -> {
@@ -144,6 +124,50 @@ public class Connection {
 
 		} catch (final IOException e) {
 			e.printStackTrace();
+		}
+	}
+
+
+	private void wT() {
+		while (true) {
+
+			final int LENGTH = 4;
+
+			final ByteBuffer lengthBuffer = ByteBuffer.allocate(LENGTH);
+			try {
+
+				int lenghtREAD = 0;
+				while (lenghtREAD < LENGTH) {
+					final int lenghtT = this.socketChannel.read(lengthBuffer);
+					if (lenghtT == -1) {
+						continue;
+					}
+					lenghtREAD += lenghtT;
+				}
+
+				final int lengA = ZPU.byteArrayToInt(lengthBuffer.array());
+
+				final ByteBuffer dataBuffer = ByteBuffer.allocate(lengA);
+
+				int dataRead = 0;
+				while (dataRead < lengA) {
+					final int dataReadT = this.socketChannel.read(dataBuffer);
+					if (dataReadT == -1) {
+						continue;
+					}
+
+					dataRead += dataReadT;
+				}
+
+				System.out.println("dataRead = " + dataRead);
+
+				final ZMP messageR = ZPU.deserialize(dataBuffer.array(), ZMP.class);
+
+				handleMessage(messageR);
+
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
